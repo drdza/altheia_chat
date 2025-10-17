@@ -1,0 +1,341 @@
+
+.stChatInput{
+    background-color: transparent;
+}
+
+/* Ajuste en input constraseña */
+[data-testid="stTextInputRootElement"]{
+    padding-right: 0px;
+}
+
+[data-testid="stHeadingWithActionElements"] h1, 
+[data-testid="stHeadingWithActionElements"] h2 {
+    font-family: "Blinker-Bold", "Source Sans", sans-seri;
+}
+
+/* Fondo del sidebar */
+[data-testid="stSidebar"] {
+    background-color: #1E2E42;
+    color: #FFF;
+}
+
+
+[data-testid="stSidebar"] [data-testid="stExpanderDetails"]{
+    /* font-family: "Blinker-Regular", "Source Sans", sans-seri; */
+    background-color: #1E2E42;
+}
+
+[data-testid="stSidebar"] summary {
+    /* font-family: "Blinker-Regular", "Source Sans", sans-seri; */
+    background-color: #A6A2F2;
+    color: #FFF;
+}
+
+/* Ajustes del Logo*/
+[data-testid="stSidebarHeader"] .stLogo{
+    border-radius: 5px;
+}
+
+
+/* Títulos del sidebar */
+[data-testid="stSidebar"] h1, 
+[data-testid="stSidebar"] h2, 
+[data-testid="stSidebar"] h3 {
+    font-family: "Blinker-Bold", "Source Sans", sans-seri;
+    color: #FFF;
+}
+
+[data-testid="stSidebar"] h4 {
+    color: #FFF;
+}
+
+[data-testid="stSidebar"] p {
+    color: #FFF;
+}
+
+/* Inputs de texto */
+[data-testid="stSidebar"] input {
+    background-color: #FFF;
+    color: #000000;
+    border-radius: 5px;
+    border: 1px solid #A6A2F2;
+}
+
+/* Botones */
+[data-testid="stSidebar"] button {
+    background-color: #A6A2F2;
+    color: #1E2E42;
+    border-radius: 5px;
+    border: none;
+    font-weight: bold;
+    min-height: 0.5rem !important;
+    padding: 0.25rem !important;
+}
+
+[data-testid="stSidebar"] button p {
+    /* font-family: "Blinker-Regular", "Source Sans", sans-seri; */
+    font-weight: bold;
+}
+
+[data-testid="stSidebar"] button:hover {
+    background-color: #9893f0;
+    color: #002244;
+}
+
+/* --- Expanders en sidebar --- */
+[data-testid="stSidebar"] .stExpander {
+    /* font-family: "Blinker-Regular", "Source Sans", sans-seri; */
+    border: 3px solid #A6A2F2;
+    border-radius: 12px;
+    padding: 0.2rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+[data-testid="stSidebar"] .stExpander::after {
+    border-radius: 12px;
+}
+
+[data-testid="stSidebar"] .stExpander p {
+    color: #FFF;
+    font-weight: 500;
+}
+
+/* --- Inputs (text, file uploader) --- */
+[data-testid="stSidebar"] input,
+[data-testid="stSidebar"] textarea,
+[data-testid="stSidebar"] .uploadedFile {
+    border: 2px solid #A6A2F2 !important;
+    border-radius: 8px;
+    padding: 0.4rem;
+    color: #1E2E42;
+    font-weight: 500;
+}
+
+
+[data-testid="stCheckbox"] p{
+    font-size: 15px;
+    color:#FFF;
+}
+
+[data-testid="stFileUploaderDropzone"]{
+    font-size: 14px;
+}
+
+.stLogin{
+    font-size: x-large;
+    font-weight: bold;
+    color: #FFF;
+    padding-top: 10px;
+    margin-bottom: 30px;
+}
+
+.stFieldName{
+    /* font-family: "Blinker-Regular", "Source Sans", sans-seri; */
+    font-size: medium;
+    font-weight: bold;    
+    color: #FFF;
+    padding-bottom: 5px;
+    margin-top: 30px;
+}
+
+.stAlertError{
+    /* font-family: "Blinker-Regular", "Source Sans", sans-seri; */
+    font-weight: bold;
+    background-color: #FFF;
+    color: #1E2E42;
+    padding: 8px;
+    border-radius: 8px;
+    font-size: medium;
+    margin-top: 50px;
+    text-align: center;
+}
+
+/* --- Mensaje de bienvenida ---*/
+ .welcome-box {
+    /* font-family: "Blinker-Regular", "Source Sans", sans-seri; */
+    background-color: #1E2E42;
+    color: #A6A2F2;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+    font-size: medium;
+}
+
+.user {
+    /* font-family: "Blinker-Regular", "Source Sans", sans-seri; */
+    color: #FFF;
+    border: 2px solid #A6A2F2;
+    padding: 1px;
+    border-radius: 5px;
+    margin-bottom: 3rem;    
+    background-color: #000;
+}
+
+/* --- Fondo general con imagen --- */
+.stApp {
+    /* font-family: "Blinker-Regular", "Source Sans", sans-seri; */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;    
+}
+
+/* Overlay de opacidad sobre el fondo */
+.stApp::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* background-color: rgba(255,255,255,0.4); */
+    z-index: 0;
+}
+
+/* Contenedor de bienvenida */
+.welcome-overlay{
+    /* font-family: "Blinker-Regular", "Source Sans", sans-seri; */
+    position: relative;
+    z-index: 1;
+    background-color: #FFF;
+    color: #1E2E42;
+    opacity: 90%;
+    padding: 2rem;
+    border-radius: 1rem;
+    max-width: 90%;
+    margin: 5rem auto;
+    box-shadow: 0px 4px 20px rgba(0,0,0,0.2);
+}
+
+.welcome-overlay-title {
+    font-size: large;
+    font-weight: bold;
+    text-align: center;    
+}
+
+.welcome-overlay-logo {
+    text-align: center; 
+    padding: 15px;   
+}
+
+.welcome-overlay-logo img {
+    height: 75px;      
+}
+
+.welcome-overlay-name {
+    font-family: 'Blinker-Bold', "Source Sans", sans-seri;
+    font-size: xx-large;
+    font-weight: bold;
+    text-align: center;
+    padding: 5px;
+}
+
+.welcome-overlay-msg
+{    
+    /* font-family: "Blinker-Regular", "Source Sans", sans-seri; */
+    font-size: 15px;
+    text-align: justify;
+}
+
+.welcome-overlay-color{
+    color: #A6A2F2
+}
+
+/* ==== Chat estilo WhatsApp (requiere :has()) ==== */
+
+/* contenedor de cada mensaje */
+[data-testid="stChatMessage"] {
+    /* font-family: "Blinker-Regular", "Source Sans", sans-seri; */
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 8px 0;
+}
+  
+/* USER -> a la derecha (burbuja verde) */
+[data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) {
+    justify-content: flex-end;
+    flex-direction: row-reverse; /* avatar a la derecha */
+    background: transparent;
+}
+
+[data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarUser"]) [data-testid="stChatMessageContent"] {
+    /* font-family: "Blinker-Regular", "Source Sans", sans-seri; */
+    background: #A6A2F2;
+    color: #000;
+    border: 1px solid rgba(0,0,0,0.06);
+    padding: 8px 12px;
+    border-radius: 12px 12px 0px 12px; /* pico a la derecha */
+    max-width: 90%;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    margin-left: auto;               /* empuja a la derecha */
+    position: relative;
+}
+
+/* ASSISTANT -> a la izquierda (burbuja blanca) */
+[data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"]) {
+    /* font-family: "Blinker-Regular", "Source Sans", sans-seri; */
+    justify-content: flex-start;
+}
+
+[data-testid="stChatMessage"]:has([data-testid="stChatMessageAvatarAssistant"]) [data-testid="stChatMessageContent"] {
+    /* font-family: "Blinker-Regular", "Source Sans", sans-seri; */
+    background: #FFF;
+    color: #000;
+    border: 1px solid #E6E6E6;
+    padding: 8px 12px;
+    border-radius: 12px 12px 12px 0px;  /* pico a la izquierda */
+    max-width: 90%;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    margin-right: auto;
+}
+
+[data-testid="stChatMessage"] p{
+    font-family: "Blinker-Regular", "Source Sans", sans-seri;
+    font-size: 15px;
+}
+
+/* avatares redondos */
+[data-testid="stChatMessageAvatarUser"] img,
+[data-testid="stChatMessageAvatarAssistant"] img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* reduce espacio vertical del “wrapper” automático de Streamlit */
+[data-testid="stLayoutWrapper"] > [data-testid="stChatMessage"] {
+    margin: 6px;
+}
+
+/* Reemplaza color/fondo del avatar user */
+[data-testid="stChatMessageAvatarUser"] {
+
+    background-image: url("data:image/png;base64,USER_AVATAR_B64");;
+    background-color: transparent;/* #1E2E42; */
+    background-size: cover;
+    color: transparent; /* oculta la letra por defecto */
+  }
+  
+/* Reemplaza avatar del asistente */
+[data-testid="stChatMessageAvatarAssistant"] {
+    background-image: url("data:image/png;base64,BOT_AVATAR_B64");
+    background-color: transparent; /* #A6A2F2;    */
+    background-size: cover;
+    color: transparent;
+}
+
+[data-testid="stChatInput"] textarea{
+    font-family: "Blinker-Regular", "Source Sans", sans-seri;
+}
+
+
+[role="radiogroup"] p {
+    font-size: 14px;
+}
+
+.stSelectbox input {
+    border: 0px !important;
+}

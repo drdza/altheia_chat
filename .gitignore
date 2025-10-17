@@ -1,0 +1,7 @@
+# Entornos
+.env
+.venv/
+venv/
+
+# IDEs
+.vscode/

@@ -1,4 +1,4 @@
-# frontend/auth_service.py
+# frontend/services/auth_service.py
 
 import requests
 import streamlit as st
@@ -7,7 +7,45 @@ from shared.config import settings
 BACKEND_URL = settings.ALTHEIA_BACKEND
 API_KEY = settings.API_KEY
 
+def require_auth(func):
+    """
+    Decorador para proteger páginas - requiere autenticación
+    """
+    def wrapper(*args, **kwargs):
+        if not st.session_state.get('user_id'):
+            st.warning("🔐 Debes iniciar sesión para acceder a esta página")
+            # Mostrar mensaje y detener ejecución
+            st.markdown(
+                """
+                <div style='text-align: center; padding: 2rem;'>
+                    <h3>🔐 Acceso Requerido</h3>
+                    <p>Debes iniciar sesión para ver esta página</p>
+                    <p>Ve a la página principal para autenticarte</p>
+                </div>
+                """, 
+                unsafe_allow_html=True
+            )
+            st.stop()
+        return func(*args, **kwargs)
+    return wrapper
 
+def require_admin(func):
+    """
+    Decorador para proteger páginas - requiere rol de administrador
+    """
+    def wrapper(*args, **kwargs):
+        if not st.session_state.get('user_id'):
+            st.warning("🔐 Debes iniciar sesión para acceder a esta página")
+            st.stop()
+        
+        if not is_admin(st.session_state.user_id):
+            st.error("⛔ No tienes permisos de administrador para acceder a esta página")
+            st.stop()
+            
+        return func(*args, **kwargs)
+    return wrapper
+
+# Las funciones existentes se mantienen igual...
 def login_user(username: str, password: str) -> str | None:
     """Autentica al usuario y guarda cookie JWT en la sesión persistente."""    
     try:

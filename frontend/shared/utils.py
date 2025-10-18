@@ -16,7 +16,6 @@ def load_css(file_name: str):
         user_b64 = get_base64_image("frontend/assets/img/user-ico.png")
         bot_b64 = get_base64_image("frontend/assets/img/altheia-ico.png")
 
-
         # --- Fuentes personalizadas ---
         fonts = [
             ("Blinker-Bold", "frontend/assets/fonts/Blinker-Bold.ttf", "truetype"),        
@@ -50,7 +49,6 @@ def load_css(file_name: str):
     except Exception as e:
         return None
 
-
 def get_simple_username(full_username: str) -> str:
     """
     Extrae nombre simplificado usando diferentes estrategias.
@@ -71,8 +69,6 @@ def get_simple_username(full_username: str) -> str:
     
     # Estrategia 2: Primer nombre + último apellido (por defecto)
     return f"{parts[0].capitalize()} {parts[-1].capitalize()}"        
-
-
 
 def apply_dynamic_background(is_logged_in: bool):
     """Aplica un fondo distinto según si el usuario está logueado o no."""
@@ -99,3 +95,93 @@ def apply_dynamic_background(is_logged_in: bool):
         """,
         unsafe_allow_html=True
     )
+
+def setup_custom_navigation():
+    """
+    Configura navegación personalizada y oculta la automática
+    """
+    custom_nav_css = """
+    <style>
+        /* Ocultar navegación automática de Streamlit */
+        [data-testid="stSidebarNav"] {
+            display: none !important;
+        }
+        
+        /* Ocultar header por defecto */
+        header[data-testid="stHeader"] {
+            display: none;
+        }
+        
+        /* Navegación personalizada en sidebar */
+        .custom-nav {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .custom-nav h4 {
+            margin: 0 0 15px 0;
+            color: #A5A2EC;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+        .custom-nav-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            margin: 8px 0;
+            background: rgba(165, 162, 236, 0.1);
+            border-radius: 8px;
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        .custom-nav-item:hover {
+            background: rgba(165, 162, 236, 0.2);
+            transform: translateX(5px);
+            border-color: #A5A2EC;
+            text-decoration: none;
+            color: white;
+        }
+        .nav-icon {
+            margin-right: 10px;
+            font-size: 1.1em;
+        }
+        .nav-active {
+            background: rgba(165, 162, 236, 0.25) !important;
+            border-color: #A5A2EC !important;
+            font-weight: 600;
+        }
+    </style>
+    """
+    st.markdown(custom_nav_css, unsafe_allow_html=True)
+
+def render_custom_navigation(current_page="Inicio"):
+    """
+    Renderiza navegación personalizada en el sidebar
+    """
+    nav_items = [
+        {"icon": "🏠", "label": "Inicio", "page": "/", "target": "_self"},
+        {"icon": "💬", "label": "Chat Principal", "page": "/pages/01_Chat_Principal.py", "target": "_self"},
+        {"icon": "🔧", "label": "Admin Memorias", "page": "/pages/02_Admin_Memorias.py", "target": "_self"},
+    ]
+    
+    nav_html = """
+    <div class="custom-nav">
+        <h4>🧭 Navegación</h4>
+    """
+    
+    for item in nav_items:
+        active_class = "nav-active" if item["label"] == current_page else ""
+        nav_html += f"""
+        <a href="{item['page']}" target="{item['target']}" class="custom-nav-item {active_class}">
+            <span class="nav-icon">{item['icon']}</span>
+            {item['label']}
+        </a>
+        """
+    
+    nav_html += "</div>"
+    
+    st.markdown(nav_html, unsafe_allow_html=True)

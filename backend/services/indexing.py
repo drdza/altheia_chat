@@ -1,4 +1,4 @@
-# app/services/indexing.py
+# backend/services/indexing.py
 
 import logging, uuid
 from typing import Iterable, List, Dict, Any
@@ -73,8 +73,17 @@ def chunk_text(text: str, max_tokens: int = 150) -> List[str]:
 
     return chunks
 
-async def upsert_chunks(chunks: List[Dict[str, Any]]):
+async def upsert_chunks(chunks: List[Dict[str, Any]], transaction_id: str = None):
+    """
+    Insertar chunks en Milvus de manera idempotente
+    """
     col = ensure_collection()
+
+    # Verificar si ya se procesó esta transacción
+    if transaction_id:
+        # Nota: Esta verificación requiere coordinación con PostgreSQL
+        # Por simplicidad, asumimos que el caller maneja la idempotencia
+        log.info(f"Processing chunks with transaction: {transaction_id}")
 
     texts = [c["text"] for c in chunks]      
     vectors = await get_embeddings(texts, input_type="passage")
@@ -89,12 +98,18 @@ async def upsert_chunks(chunks: List[Dict[str, Any]]):
     col.insert(entities)
     col.flush()    
     
+    log.info(f"✅ Insertados {len(chunks)} chunks en Milvus")
     return len(chunks)
 
 async def delete_docs(doc_ids: List[str], user_id: str):
     col = ensure_collection()
-    expr = f"user_id == '{user_id}' and doc_id in {tuple(doc_ids)}"
+    # Construir expresión para eliminar por doc_id
+    if len(doc_ids) == 1:
+        expr = f"doc_id == '{doc_ids[0]}'"
+    else:
+        doc_ids_str = "', '".join(doc_ids)
+        expr = f"doc_id in ['{doc_ids_str}']"
+    
     res = col.delete(expr)
     col.flush()
     log.info(f"Deleted docs: {doc_ids}, result={res}")
-

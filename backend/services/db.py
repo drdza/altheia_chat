@@ -5,7 +5,7 @@ import uuid
 from datetime import datetime, timezone
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import declarative_base, sessionmaker
-from sqlalchemy import Column, String, DateTime, Text, ForeignKey
+from sqlalchemy import Column, String, DateTime, Text, ForeignKey, Integer, JSON
 from sqlalchemy.dialects.postgresql import UUID
 from core.config import settings
 
@@ -13,7 +13,7 @@ DATABASE_URL = settings.DATABASE_ADMIN_URL
 
 Base = declarative_base()
 
-# 🧩 Tablas
+# 🧩 Tablas existentes
 class ChatSession(Base):
     __tablename__ = "chat_sessions"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
@@ -29,6 +29,40 @@ class ChatMessage(Base):
     role = Column(String)
     content = Column(Text)
     timestamp = Column(DateTime, default=datetime.now(timezone.utc))
+
+# 🆕 NUEVAS TABLAS para gestión documental
+class Document(Base):
+    __tablename__ = "documents"
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id = Column(String, index=True)
+    chat_id = Column(UUID(as_uuid=True), ForeignKey("chat_sessions.id"), nullable=True)
+    original_filename = Column(String)
+    file_hash = Column(String(64))
+    current_version = Column(Integer, default=1)
+    document_type = Column(String(20), default='user_private')  # 'user_private', 'public_base'
+    status = Column(String(20), default='active')
+    created_at = Column(DateTime, default=datetime.now(timezone.utc))
+    last_updated = Column(DateTime, default=datetime.now(timezone.utc))
+    metadata = Column(JSON)  # Para tags, descripción, etc.
+
+class DocumentVersion(Base):
+    __tablename__ = "document_versions"
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    document_id = Column(UUID(as_uuid=True), ForeignKey("documents.id"))
+    version = Column(Integer)
+    file_hash = Column(String(64))
+    doc_id = Column(String)  # ID único en Milvus para esta versión
+    created_at = Column(DateTime, default=datetime.now(timezone.utc))
+    chunks_count = Column(Integer)
+
+class UploadTransaction(Base):
+    __tablename__ = "upload_transactions"
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    doc_id = Column(String, index=True)  # ID del documento en Milvus
+    user_id = Column(String)
+    status = Column(String(20), default='pending')  # 'pending', 'completed', 'failed'
+    created_at = Column(DateTime, default=datetime.now(timezone.utc))
+    updated_at = Column(DateTime, default=datetime.now(timezone.utc))
 
 # 🧠 Conexión
 engine = create_async_engine(DATABASE_URL, echo=False, future=True)

@@ -11,6 +11,7 @@ from core.utils import read_chunk_file
 from services.indexing import upsert_chunks
 from services.db import get_db
 from services.conversation import get_or_create_session, get_full_history, get_user_sessions
+from services.transaction_manager import transaction_manager
 
 log = logging.getLogger(__name__)
 router = APIRouter()
@@ -158,20 +159,53 @@ async def rephrase(req: RephraseRequest):
 # 📤 Endpoint para ingestar un documento nuevo a la vectorstore
 # ==============================================================
 @router.post("/ingest-file", response_model=FileIngestResponse)
-async def user_ingest_file(file: UploadFile = File(...), user: str = Depends(get_current_user)):
+async def user_ingest_file(
+    file: UploadFile = File(...), 
+    user: str = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
     user_id = user["user"]
+    transaction_id = None
+    
     try:        
+        # 1. PREPARE: Procesar archivo y generar transaction
         result = await read_chunk_file(file, user_id)
-
-        await upsert_chunks(result["chunks"])
-
-        log.info(f"Upserted {result['chunks_count']} chunks for {user_id}")
+        transaction_id = await transaction_manager.begin_upload_transaction(db, result["doc_id"], user_id)
         
-        return {"doc_id": result["doc_id"], "chunks": result["chunks_count"]}
+        # 2. COMMIT FASE 1: Insertar en Milvus
+        await upsert_chunks(result["chunks"], transaction_id)
+        
+        # 3. COMMIT FASE 2: Registrar en PostgreSQL
+        document_data = {
+            "id": result["doc_id"],
+            "user_id": user_id,
+            "original_filename": file.filename,
+            "file_hash": result["file_hash"],
+            "chunks_count": result["chunks_count"],
+            "metadata": result.get("file_metadata", {})
+        }
+        await transaction_manager.commit_upload(db, transaction_id, document_data)
+
+        log.info(f"✅ Upload completado: {result['doc_id']} - {result['chunks_count']} chunks")
+        
+        return {
+            "doc_id": result["doc_id"], 
+            "chunks": result["chunks_count"],
+            "message": "Document uploaded successfully"
+        }
 
     except HTTPException:
         raise
 
     except Exception as e:
-        log.error(f"Unexpected error in user_ingest_file: {e}")
-        return {"doc_id": "", "chunks": 0}
+        log.error(f"❌ Error en user_ingest_file: {e}")
+        
+        # COMPENSACIÓN: Revertir cambios en caso de error
+        if transaction_id and 'result' in locals():
+            await transaction_manager.rollback_upload(db, transaction_id, result["doc_id"])
+        
+        return {
+            "doc_id": "", 
+            "chunks": 0, 
+            "message": f"Error processing file: {str(e)}"
+        }

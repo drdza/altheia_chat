@@ -2,26 +2,26 @@ import streamlit as st
 from services import api
 
 def get_user_chats():
-    with st.sidebar.expander("💭 Mis Chats", expanded=True):
+    with st.sidebar.expander("💭 Mis Chats", expanded=False):
         # --- Obtener chats ---
         chats = api.get_user_chats()
         if not chats:
             st.info("No hay chats anteriores")
             return
-
-        # --- Botón para gestión de chats ---
-        if st.button("🗂️ Gestionar Mis Chats", use_container_width=True, help="Administrar y organizar tus conversaciones"):
-            st.session_state.show_chat_management = True
-            st.rerun()
-
-        col1, col2 = st.columns([2,6], vertical_alignment='center')
-
+            
+        col1, col2 = st.columns(2, vertical_alignment='center')        
+    
         with col1:
-            # --- Botón Nuevo Chat ---
-            if st.button("➕", use_container_width=True, type="primary", help="✨ Nuevo Chat"):
+            if st.button("✨ Nuevo", use_container_width=True, type="primary", help="Nuevo Chat"):
                 st.session_state.chat_history = []
                 st.session_state.chat_id = None
                 st.session_state.new_chat_mode = True
+                st.rerun()
+    
+        with col2:
+            if st.button("🗂️ Admin.", use_container_width=True, help="Administrar conversaciones"):
+                st.switch_page("pages/02_chat_manager.py")
+                
 
         chat_options = {f"{chat['title']}": chat['session_id'] for chat in chats}
 
@@ -32,25 +32,24 @@ def get_user_chats():
             st.session_state.new_chat_mode = False
         else:
             selectbox_key = "chat_selectbox_stable"
+        
+        # --- Selectbox persistente ---
+        selected_title = st.selectbox(
+            "Seleccione un chat:",
+            options=list(chat_options.keys()),
+            index=None,
+            key=selectbox_key,
+            label_visibility="collapsed",
+            placeholder="Chats anteriores"
+        )
 
-        with col2:
-            # --- Selectbox persistente ---
-            selected_title = st.selectbox(
-                "Seleccione un chat:",
-                options=list(chat_options.keys()),
-                index=None,
-                key=selectbox_key,
-                label_visibility="collapsed",
-                placeholder="Chats anteriores"
-            )
-
-            # --- Cargar chat seleccionado ---
-            if selected_title:
-                chat_id = chat_options[selected_title]
-                if st.session_state.get("chat_id") != chat_id:
-                    st.session_state.chat_id = chat_id
-                    chats_data = api.get_chat_history(chat_id)
-                    st.session_state.chat_history = chats_data["history"]
+        # --- Cargar chat seleccionado ---
+        if selected_title:
+            chat_id = chat_options[selected_title]
+            if st.session_state.get("chat_id") != chat_id:
+                st.session_state.chat_id = chat_id
+                chats_data = api.get_chat_history(chat_id)
+                st.session_state.chat_history = chats_data["history"]
 
 # Función para mostrar el panel de gestión (se llamará desde app.py)
 def show_chat_management_modal():

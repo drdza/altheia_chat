@@ -84,7 +84,7 @@ def logout_user():
         st.session_state.session.post(f"{BACKEND_URL}/auth/logout")        
         st.session_state.user_id = None
         st.session_state.chat_history = []
-        st.session_state.chat_id = None
+        st.session_state.chat_id = None        
     except Exception as e:
         st.error(f"Error cerrando sesión: {e}")
 

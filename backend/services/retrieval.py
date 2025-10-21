@@ -38,22 +38,24 @@ async def retrieve_context(query: str, user_id: str):
     )
     log.info(f"Inital results: {len(initial_results)}")
         
-    # Fase 2: Filtrar por acceso
+    # Fase 2: Filtrar por acceso Y estado del documento
     filtered_docs = []
     for hits in initial_results:
         for hit in hits:
             
             doc_user_id = hit.entity.get('user_id')            
+            metadata = hit.entity.get('metadata', {})
+            document_status = metadata.get('document_status', 'active')  # ← NUEVO: obtener estado
 
-            # Verificar permisos
-            if doc_user_id == "PUBLIC" or (user_id and doc_user_id == user_id):
+            # Verificar permisos Y que el documento esté activo
+            if (doc_user_id == "PUBLIC" or (user_id and doc_user_id == user_id)) and document_status == "active":
                 filtered_docs.append({
                     'doc_id': hit.entity.get('doc_id'),
                     'chunk_id': hit.entity.get('chunk_id'),
                     'text': hit.entity.get('text'),
                     'user_id': doc_user_id,
                     'score': hit.score,
-                    'metadata': hit.entity.get('metadata', {})
+                    'metadata': metadata
                 })
 
     # Ordenar por score y limitar

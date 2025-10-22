@@ -1,0 +1,100 @@
+# version: "3.9"
+
+services:
+  # 🧠 Base vectorial
+  milvus:
+    image: milvusdb/milvus:2.4.23
+    container_name: altheia_milvus
+    restart: always
+    ports:
+      - "19530:19530"
+      - "9091:9091"
+    environment:
+      MILVUS_LOG_LEVEL: info
+      ETCD_ENDPOINTS: etcd:2379
+      MINIO_ADDRESS: minio:9010
+      KNOWHERE_GPU_MEM_POOL_SIZE: 2048;4096
+      MINIO_BUCKET_NAME: milvus-bucket
+    depends_on:
+      - etcd
+      - minio
+    volumes:
+      - milvus_data:/var/lib/milvus
+    profiles: ['sql-stack']
+
+  etcd:
+    image: quay.io/coreos/etcd:v3.5.16
+    container_name: altheia_etcd
+    restart: always
+    environment:
+      ETCD_AUTO_COMPACTION_MODE: revision
+      ETCD_AUTO_COMPACTION_RETENTION: "1000"
+      ETCD_QUOTA_BACKEND_BYTES: "4294967296"
+      ETCD_SNAPSHOT_COUNT: "50000"
+    volumes:
+      - etcd_data:/etcd
+    command: etcd -advertise-client-urls=http://127.0.0.1:2379 -listen-client-urls http://0.0.0.0:2379 --data-dir /etcd
+    profiles: ['sql-stack']
+
+  minio:
+    image: minio/minio:RELEASE.2024-05-01T01-11-10Z
+    container_name: altheia_minio
+    restart: always
+    command: minio server /data --console-address ":9011"
+    environment:
+      MINIO_ACCESS_KEY: altheiaadmin
+      MINIO_SECRET_KEY: altheiapass
+    volumes:
+      - minio_data:/data
+    ports:
+      - "9010:9000"
+      - "9011:9011"
+    profiles: ['sql-stack']
+
+  # 🧩 Base estructurada
+  postgres:
+    image: postgres:16
+    container_name: altheia_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: altheia
+      POSTGRES_PASSWORD: Inn0Reyma#
+      POSTGRES_DB: altheia_chat
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U altheia"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    profiles: ['sql-stack']
+
+  # ⚡ Memoria temporal
+  redis:
+    image: redis:7.4
+    container_name: altheia_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    profiles: ['sql-stack']
+
+volumes:
+  milvus_data:
+    name: milvus_data
+  minio_data:
+    name: minio_data
+  etcd_data:
+    name: etcd_data
+  postgres_data:
+    name: postgres_data
+  redis_data:
+    name: redis_data
+
+networks:
+  default:
+    name: altheia_network
+

@@ -1,0 +1,52 @@
+# Requerimientos de backend AltheIA Chat
+
+fastapi==0.115.0
+uvicorn==0.30.6
+httpx==0.27.2
+starlette==0.38.6
+
+# Validación y configuración
+pydantic==2.9.2
+pydantic-settings==2.11.0
+python-dotenv==1.1.1
+marshmallow==3.20.1
+Jinja2==3.1.4
+MarkupSafe==3.0.2
+anyio==4.4.0
+
+# Conexión y base de datos
+SQLAlchemy==2.0.43
+asyncpg==0.30.0
+
+# Cache y memoria
+redis==6.4.0
+
+# Seguridad y autenticación
+python-multipart==0.0.20
+python-jose==3.5.0
+ldap3==2.9.1
+cryptography==46.0.2
+rsa==4.9.1
+ecdsa==0.19.1
+
+# Procesamiento de datos / documentos
+pandas==2.2.2
+openpyxl==3.1.5
+PyPDF2==3.0.1
+python-docx==1.1.2
+
+# Modelos, embeddings y vectores
+sentence-transformers==3.0.1
+transformers==4.56.2
+torch==2.8.0
+pymilvus==2.6.2
+scikit-learn==1.7.2
+scipy==1.15.3
+numpy==2.2.6
+tqdm==4.67.1
+
+# Utilidades
+requests==2.32.5
+regex==2025.9.18
+watchfiles==1.1.0
+

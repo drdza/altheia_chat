@@ -41,9 +41,10 @@ class Document(Base):
     current_version = Column(Integer, default=1)
     document_type = Column(String(20), default='user_private')  # 'user_private', 'public_base'
     status = Column(String(20), default='active')
+    chunks_count = Column(Integer, default=0)  
     created_at = Column(DateTime, default=datetime.now(timezone.utc))
     last_updated = Column(DateTime, default=datetime.now(timezone.utc))
-    metadata = Column(JSON)  # Para tags, descripción, etc.
+    doc_metadata = Column(JSON)
 
 class DocumentVersion(Base):
     __tablename__ = "document_versions"

@@ -40,6 +40,7 @@ class TransactionManager:
             document = Document(
                 id=uuid.UUID(document_data["id"]),
                 user_id=document_data["user_id"],
+                chat_id=document_data["chat_id"],
                 original_filename=document_data["original_filename"],
                 file_hash=document_data["file_hash"],
                 current_version=1,

@@ -160,6 +160,7 @@ async def rephrase(req: RephraseRequest):
 # ==============================================================
 @router.post("/ingest-file", response_model=FileIngestResponse)
 async def user_ingest_file(
+    chat_id: str = None,
     file: UploadFile = File(...), 
     user: str = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
@@ -178,6 +179,7 @@ async def user_ingest_file(
         # 3. COMMIT FASE 2: Registrar en PostgreSQL
         document_data = {
             "id": result["doc_id"],
+            "chat_id": chat_id,
             "user_id": user_id,
             "original_filename": file.filename,
             "file_hash": result["file_hash"],

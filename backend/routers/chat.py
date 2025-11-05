@@ -5,7 +5,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends, UploadFile, File, HTTPException
 from fastapi.responses import StreamingResponse
 from models.schemas import ChatRequest, ChatResponse, FileIngestResponse, RephraseRequest, RephraseResponse
-from core.graph import run_rag_chat, run_rag_chat_stream, run_rephrase
+# from core.graph import run_rag_chat, run_rag_chat_stream, run_rephrase
+from core.agentic_graph import run_agent_chat, run_agent_chat_stream
 from services.auth_jwt import get_current_user
 from core.utils import read_chunk_file
 from services.indexing import upsert_chunks
@@ -210,4 +211,5 @@ async def user_ingest_file(
             "doc_id": "", 
             "chunks": 0, 
             "message": f"Error processing file: {str(e)}"
+
         }

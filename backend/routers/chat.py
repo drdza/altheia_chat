@@ -23,7 +23,7 @@ router = APIRouter()
 async def chat(
     req: ChatRequest,
     db: AsyncSession = Depends(get_db),
-    user: str = Depends(get_current_user)
+    user: dict = Depends(get_current_user)
 ):
     """
     Endpoint principal del chat:
@@ -59,7 +59,7 @@ async def chat(
 async def chat_stream(
     req: ChatRequest,
     db: AsyncSession = Depends(get_db),
-    user: str = Depends(get_current_user)
+    user: dict = Depends(get_current_user)
 ):
     """
     Endpoint de chat con respuesta en streaming
@@ -101,7 +101,7 @@ async def chat_stream(
 async def get_chat_history(
     session_id: str,
     db: AsyncSession = Depends(get_db),
-    user_id: str = Depends(get_current_user)
+    user: dict = Depends(get_current_user)
 ):
     """
     Devuelve todos los mensajes almacenados para una sesión específica.
@@ -120,7 +120,7 @@ async def get_chat_history(
 # 💭 Endpoint para recuperar las sesiones del usuario
 # ======================================================
 @router.get("/sessions")
-async def list_user_chats(db: AsyncSession = Depends(get_db), user: str = Depends(get_current_user)):
+async def list_user_chats(db: AsyncSession = Depends(get_db), user: dict = Depends(get_current_user)):
     user_id = user["user"]
     try:
         sessions = await get_user_sessions(db, user_id)
@@ -137,12 +137,12 @@ async def list_user_chats(db: AsyncSession = Depends(get_db), user: str = Depend
 @router.post("/new", summary="Iniciar un nuevo chat")
 async def new_chat(
     db: AsyncSession = Depends(get_db),
-    user_id: str = Depends(get_current_user)
+    user: dict = Depends(get_current_user)
 ):
     """
     Crea una nueva sesión de chat vacía.
     """
-    session = await get_or_create_session(db, user_id)
+    session = await get_or_create_session(db, user["user"])
     return {"chat_id": session.id, "title": session.title}
 
 
@@ -161,7 +161,7 @@ async def rephrase(req: RephraseRequest):
 @router.post("/ingest-file", response_model=FileIngestResponse)
 async def user_ingest_file(
     file: UploadFile = File(...), 
-    user: str = Depends(get_current_user),
+    user: dict = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
     user_id = user["user"]

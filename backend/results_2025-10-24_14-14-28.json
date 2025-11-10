@@ -1,0 +1,200 @@
+[
+  {
+    "test_case": "Saludo simple",
+    "input": "hola",
+    "has_document": false,
+    "output": {
+      "category": "conversational",
+      "subcategory": "greeting",
+      "reasoning": "La pregunta 'hola' se ajusta a la regla específica de conversational/greeting, que indica que los saludos deben clasificarse como interacción conversacional",
+      "confidence": 1.0
+    }
+  },
+  {
+    "test_case": "CV con solicitud de feedback",
+    "input": "¿Puedes revisar mi CV y decirme cómo mejorarlo?",
+    "has_document": true,
+    "output": {
+      "category": "document_analysis",
+      "subcategory": "critique",
+      "reasoning": "La pregunta del usuario incluye un documento adjunto (CV) y solicita una revisión para mejorar, lo que coincide con las reglas de la categoría document_analysis, específicamente con la subcategoría critique.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "test_case": "Reformulación específica",
+    "input": "reformula esto más formal",
+    "has_document": false,
+    "output": {
+      "category": "text_improvement",
+      "subcategory": "formalize",
+      "reasoning": "La pregunta'reformula esto más formal' indica que el usuario quiere mejorar un texto existente para hacerlo más formal, lo que se ajusta a la subcategoría 'formalize' dentro de la categoría 'text_improvement'.",
+      "confidence": 1.0
+    }
+  },
+  {
+    "test_case": "Análisis genérico de documento",
+    "input": "analiza este documento",
+    "has_document": true,
+    "output": {
+      "category": "document_analysis",
+      "subcategory": "summary",
+      "reasoning": "Se analiza un documento y se pide 'analiza este documento', lo que indica que la intención es resumir o procesar su contenido.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "test_case": "Pregunta general de conocimiento",
+    "input": "¿qué es la inteigencia empresarial?",
+    "has_document": false,
+    "output": {
+      "category": "information_retrieval",
+      "subcategory": "factual",
+      "reasoning": "La pregunta es de definición/recuperación de información sobre un concepto específico (inteligencia empresarial) sin documento adjunto.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "test_case": "Tarea creativa",
+    "input": "escribe un poema sobre el amor",
+    "has_document": false,
+    "output": {
+      "category": "content_creation",
+      "subcategory": "creative",
+      "reasoning": "La solicitud de 'escribir un poema sobre el amor' se ajusta a la categoría de contenido creativo, ya que implica la creación de un texto original y con un tono emocional.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "test_case": "Solo documento sin texto",
+    "input": "",
+    "has_document": true,
+    "output": {
+      "category": "document_analysis",
+      "subcategory": "summary",
+      "reasoning": "Hay un documento adjunto y la pregunta parece estar solicitando un resumen o descripción del contenido del documento.",
+      "confidence": 0.8
+    }
+  },
+  {
+    "test_case": "Solicitud de ayuda con documento",
+    "input": "¿me ayudas con este PDF?",
+    "has_document": true,
+    "output": {
+      "category": "document_analysis",
+      "subcategory": "qna",
+      "reasoning": "Hay un documento adjunto y la pregunta se refiere a él. La intención principal es hacer una pregunta sobre el contenido del PDF.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "test_case": "Reformulación de simplificación",
+    "input": "simplifica este texto",
+    "has_document": false,
+    "output": {
+      "category": "text_improvement",
+      "subcategory": "simplify",
+      "reasoning": "La pregunta es una solicitud para simplificar el lenguaje o el contenido de un texto, lo cual se ajusta a la categoría de text_improvement y subcategoría de simplify, ya que busca hacer el texto más fácil de entender.",
+      "confidence": 1.0
+    }
+  },
+  {
+    "test_case": "Comparación de documentos",
+    "input": "compara estos dos documentos",
+    "has_document": true,
+    "output": {
+      "category": "document_analysis",
+      "subcategory": "compare",
+      "reasoning": "La pregunta del usuario es 'compara estos dos documentos' y hay un documento adjunto. Según las reglas, cuando hay un documento adjunto y la pregunta se refiere a él, la categoría principal es document_analysis. La subcategoría es 'compare' porque el usuario específicamente solicita la comparación entre los dos documentos.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "test_case": "Pregunta de identidad del Agente",
+    "input": "¿Quien eres tú?",
+    "has_document": false,
+    "output": {
+      "category": "conversational",
+      "subcategory": "identity",
+      "reasoning": "La pregunta '¿Quién eres tú?' coincide directamente con la regla clave para clasificar como conversational/identity, ya que se trata de una pregunta sobre la identidad del agente.",
+      "confidence": 1.0
+    }
+  },
+  {
+    "test_case": "Pregunta sobre una empresa",
+    "input": "¿Qué es Grupo Reyes?",
+    "has_document": false,
+    "output": {
+      "category": "information_retrieval",
+      "subcategory": "factual",
+      "reasoning": "La pregunta es una solicitud de información general sobre un tema específico (Grupo Reyes) sin hacer referencia a un documento adjunto y sin indicar una tarea creativa o de mejora textual.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "test_case": "Solicita información de un proceso interno",
+    "input": "¿Cómo genero ticket?",
+    "has_document": false,
+    "output": {
+      "category": "information_retrieval",
+      "subcategory": "procedural",
+      "reasoning": "La pregunta sobre cómo generar un ticket sugiere que el usuario busca una guía paso a paso para realizar un procedimiento específico, lo que se ajusta a la categoría de información_retrieval y más específicamente a la subcategoría de procedural",
+      "confidence": 0.9
+    }
+  },
+  {
+    "test_case": "Solicita información de un proceso interno",
+    "input": "¿Qué debo hacer para que me resuelvan mi falla con mi equipo de cómputo?",
+    "has_document": false,
+    "output": {
+      "category": "technical_support",
+      "subcategory": "troubleshooting",
+      "reasoning": "La pregunta del usuario busca resolver una falla específica con su equipo de cómputo, lo que indica que está solicitando ayuda para diagnosticar y solucionar un problema técnico.",
+      "confidence": 0.95
+    }
+  },
+  {
+    "test_case": "Solicita información de un proceso interno",
+    "input": "¿Cual es el estatus de mi ticket?",
+    "has_document": false,
+    "output": {
+      "category": "information_retrieval",
+      "subcategory": "status",
+      "reasoning": "La pregunta se refiere a obtener información sobre el estatus de un ticket. Esto encaja con la categoría información_retrieval y la subcategoría status, ya que el usuario busca información específica sobre el estado de su solicitud.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "test_case": "Solicita información de un tema muy especifico",
+    "input": "Podrías darme mi horoscopo del día",
+    "has_document": false,
+    "output": {
+      "category": "information_retrieval",
+      "subcategory": "factual",
+      "reasoning": "La pregunta solicitando el horóscopo del día sugiere que el usuario está buscando información específica de tipo factual, como eventos o datos relacionados con el horóscopo.",
+      "confidence": 0.9
+    }
+  },
+  {
+    "test_case": "Pide información en tiempo real",
+    "input": "¿Sabes que día es hoy?",
+    "has_document": false,
+    "output": {
+      "category": "conversational",
+      "subcategory": "greeting",
+      "reasoning": "La pregunta \"¿Sabes qué día es hoy?\" representa un saludo o una forma de iniciar una conversación, lo que se alinea con la categoría conversacional y la subcategoría de saludo",
+      "confidence": 0.8
+    }
+  },
+  {
+    "test_case": "Pide información de un tema puntual y actual",
+    "input": "Dame todas las noticias de Grupo Reyes relacionadas a temas de IA",
+    "has_document": false,
+    "output": {
+      "category": "information_retrieval",
+      "subcategory": "news",
+      "reasoning": "La pregunta es sobre noticias de un tema específico (IA) relacionado con una entidad (Grupo Reyes), lo que indica una búsqueda de información actual y noticias.",
+      "confidence": 0.9
+    }
+  }
+]

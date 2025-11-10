@@ -31,7 +31,7 @@ def rephrase_option():
 def upload_user_file():
     st.caption("#### 📁 Subir archivo para consultas personales")
         
-    file = st.file_uploader("Elige un documento (txt, md, pdf, docx, xlsx)...", type=["txt", "md", "pdf", "docx", "xlsx"])
+    file = st.file_uploader("Elige un documento (txt, md, pdf, docx, xlsx)...", type=["txt", "md", "pdf", "docx", "xlsx"], label_visibility="collapsed")
     
     if st.button("🔗 Cargar Archivo", width="stretch") and file:
         ok = api.upload_user_file(file)
@@ -39,8 +39,3 @@ def upload_user_file():
             st.toast("Documento cargado correctamente", icon = '✅', duration=5)
         else:
             st.toast("Ocurrió un error al subir el documento", icon = '❌', duration=5)
-
-def load_user_options():
-    with st.expander("🎓 Mis Documentos"):
-        # rephrase_option()
-        upload_user_file()

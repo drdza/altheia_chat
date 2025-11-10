@@ -3,10 +3,6 @@
     background-color: transparent;
 }
 
-[data-testid="stSidebarNavItems"] {
-    display: none;
-}
-
 /* Ajuste en input constraseña */
 [data-testid="stTextInputRootElement"]{
     padding-right: 0px;
@@ -69,11 +65,9 @@
 [data-testid="stSidebar"] button {
     background-color: #A6A2F2;
     color: #1E2E42;
-    border-radius: 5px;
+    border-radius: 8px;
     border: none;
     font-weight: bold;
-    min-height: 0.5rem !important;
-    padding: 0.25rem !important;
 }
 
 [data-testid="stSidebar"] button p {
@@ -157,20 +151,23 @@
 
 /* --- Mensaje de bienvenida ---*/
  .welcome-box {
-    font-family: "Blinker-Regular", "Source Sans", sans-seri;    
-    color: #FFF;
-    font-size: 0.9em;
+    /* font-family: "Blinker-Regular", "Source Sans", sans-seri; */
+    background-color: #1E2E42;
+    color: #A6A2F2;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+    font-size: medium;
 }
 
 .user {
-    font-weight: bold;
+    /* font-family: "Blinker-Regular", "Source Sans", sans-seri; */
+    color: #FFF;
     border: 2px solid #A6A2F2;
     padding: 1px;
     border-radius: 5px;
+    margin-bottom: 3rem;    
     background-color: #000;
-    text-align: center;
-    color: #A6A2F2;
-    font-size: medium;
 }
 
 /* --- Fondo general con imagen --- */
@@ -195,18 +192,18 @@
 }
 
 /* Contenedor de bienvenida */
-.welcome-overlay {
+.welcome-overlay{
     /* font-family: "Blinker-Regular", "Source Sans", sans-seri; */
     position: relative;
     z-index: 1;
     background-color: #FFF;
     color: #1E2E42;
     opacity: 90%;
-    padding: 2rem 2rem 0.5rem;
-    border-radius: 1rem 1rem 0rem 0rem;
+    padding: 2rem;
+    border-radius: 1rem;
     max-width: 90%;
-    margin: 0.5rem auto 0rem;
-    box-shadow: 6px -16px 20px rgba(0, 0, 0, 0.2);
+    margin: 5rem auto;
+    box-shadow: 0px 4px 20px rgba(0,0,0,0.2);
 }
 
 .welcome-overlay-title {
@@ -232,27 +229,15 @@
     padding: 5px;
 }
 
-.welcome-overlay-msg {    
+.welcome-overlay-msg
+{    
+    /* font-family: "Blinker-Regular", "Source Sans", sans-seri; */
     font-size: 15px;
     text-align: justify;
 }
 
-.welcome-overlay-color {
+.welcome-overlay-color{
     color: #A6A2F2
-}
-
-[data-testid="stForm"] {
-    max-width: 90%;
-    align-items: center;
-    position: relative;
-    padding: 0.5rem 2rem 2rem;
-    margin: 0rem auto;    
-    box-shadow: 7px 1px 20px rgba(0, 0, 0, 0.2);
-    border-radius: 0rem 0rem 1rem 1rem;
-    background-color: #FFF;
-    opacity: 90%;
-    border: 0px;
-    /* box-shadow: 6px 9px 20px rgba(0, 0, 0, 0.2); */
 }
 
 /* ==== Chat estilo WhatsApp (requiere :has()) ==== */

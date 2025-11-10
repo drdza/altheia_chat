@@ -43,7 +43,7 @@ class Document(Base):
     status = Column(String(20), default='active')
     created_at = Column(DateTime, default=datetime.now(timezone.utc))
     last_updated = Column(DateTime, default=datetime.now(timezone.utc))
-    metadata = Column(JSON)  # Para tags, descripción, etc.
+    doc_metadata = Column(JSON)  # Para tags, descripción, etc.
 
 class DocumentVersion(Base):
     __tablename__ = "document_versions"

@@ -1,8 +1,9 @@
 # frontend/components/chat_ui.py
+
 import uuid
 import streamlit as st
-from shared import utils
 from services.api import chat_with_bot, chat_with_bot_stream, rephrase_text
+from shared import utils
 
 
 def chat_interface():
@@ -18,8 +19,11 @@ def chat_interface():
         st.session_state.chat_history.append({"role": "user", "content": user_input})
  
         try:
-            chat_response = chat_with_bot(user_input, st.session_state.chat_id)
-            answer = chat_response["answer"]
+            if st.session_state.rephrased:
+                answer = rephrase_text(user_input, st.session_state.style)
+            else:
+                chat_response = chat_with_bot(user_input, st.session_state.chat_id)
+                answer = chat_response["answer"]
             
 
             st.chat_message("assistant").markdown(answer)
@@ -56,7 +60,6 @@ def chat_interface_stream():
         
     # Input de chat
     if user_input := st.chat_input("Escribe tu mensaje..."):
-        
         # Limpiar estado de streaming anterior
         st.session_state.streaming_content = ""
         st.session_state.is_streaming = False
@@ -66,6 +69,13 @@ def chat_interface_stream():
         st.session_state.chat_history.append({"role": "user", "content": user_input})
  
         try:
+            if st.session_state.rephrased:
+                # Modo rephrase (sin streaming)
+                answer = rephrase_text(user_input, st.session_state.style)
+                st.chat_message("assistant").markdown(answer)
+                st.session_state.chat_history.append({"role": "assistant", "content": answer})
+                
+            else:
                 # Modo chat normal CON streaming
                 st.session_state.is_streaming = True
                 
@@ -77,7 +87,7 @@ def chat_interface_stream():
                 # Procesar stream
                 for chunk in chat_with_bot_stream(user_input, st.session_state.chat_id):
                     if "error" in chunk:
-                        st.error(f"Error: {chunk['error']}")
+                        st.error(f"{chunk['error']}")
                         break
                     
                     # Actualizar chat_id si viene en el primer chunk

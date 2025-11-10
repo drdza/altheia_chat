@@ -182,7 +182,7 @@ async def user_ingest_file(
             "original_filename": file.filename,
             "file_hash": result["file_hash"],
             "chunks_count": result["chunks_count"],
-            "metadata": result.get("file_metadata", {})
+            "doc_metadata": result.get("file_metadata", {})
         }
         await transaction_manager.commit_upload(db, transaction_id, document_data)
 

@@ -23,20 +23,9 @@ def _headers(include_api_key=True):
 
 def chat_with_bot(question: str, chat_id: str) -> str:
     session = _session()
-
-    r = session.post(
-        f"{BACKEND_URL}/chat/", 
-        json = {
-            "question": question, 
-            "chat_id": chat_id if chat_id is not None else "" 
-        }, 
-        headers=_headers()
-    )
-    
+    r = session.post(f"{BACKEND_URL}/chat/", json={"question": question, "chat_id": chat_id}, headers=_headers())
     r.raise_for_status()    
-    
     response = r.json()    
-    
     return {"answer": response["answer"], "chat_id": response["chat_id"]}
 
 def chat_with_bot_stream(question: str, chat_id: str = None):
@@ -45,7 +34,7 @@ def chat_with_bot_stream(question: str, chat_id: str = None):
 
     payload = {
         "question": question,
-        "chat_id": chat_id if chat_id is not None else "" 
+        "chat_id": chat_id if chat_id is not None else ""
     }
 
     try:

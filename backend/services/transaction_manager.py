@@ -46,7 +46,7 @@ class TransactionManager:
                 document_type=document_data.get("document_type", "user_private"),
                 status="active",
                 chunks_count=document_data["chunks_count"],
-                metadata=document_data.get("metadata", {})
+                doc_metadata=document_data.get("doc_metadata", {})
             )
             db.add(document)
             

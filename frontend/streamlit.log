@@ -1,0 +1,110 @@
+nohup: ignoring input
+
+Collecting usage statistics. To deactivate, set browser.gatherUsageStats to false.
+
+
+  You can now view your Streamlit app in your browser.
+
+  URL: http://0.0.0.0:8505
+
+[31m──[0m[31m────────────────────────[0m[31m [0m[1;31mTraceback [0m[1;2;31m(most recent call last)[0m[31m [0m[31m─────────────────────────[0m[31m──[0m
+[31m [0m [2m/home/drodriguez/ia-bot/venv310/lib/python3.10/site-packages/streamlit/runtime/scrip[0m [31m [0m
+[31m [0m [2mtrunner/[0m[1mexec_code.py[0m:121 in exec_func_with_error_handling                            [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/drodriguez/ia-bot/venv310/lib/python3.10/site-packages/streamlit/runtime/scrip[0m [31m [0m
+[31m [0m [2mtrunner/[0m[1mscript_runner.py[0m:645 in code_to_exec                                         [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/drodriguez/ia-bot/altheia_chat/frontend/[0m[1mapp.py[0m:29 in <module>                  [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 26 [0m                                                                               [31m [0m
+[31m [0m   [2m 27 [0m[2m# Cargar estilos institucionales[0m                                               [31m [0m
+[31m [0m   [2m 28 [0mutils.load_css([33m"[0m[33mfrontend/assets/styles.css[0m[33m"[0m)                                   [31m [0m
+[31m [0m [31m❱ [0m 29 utils.apply_dynamic_background([96mbool[0m(st.session_state.user_id))                 [31m [0m
+[31m [0m   [2m 30 [0m                                                                               [31m [0m
+[31m [0m   [2m 31 [0m[2m# --- Sidebar login/logout ---[0m                                                 [31m [0m
+[31m [0m   [2m 32 [0m[94mwith[0m st.sidebar:                                                               [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/drodriguez/ia-bot/altheia_chat/frontend/shared/[0m[1mutils.py[0m:82 in                  [31m [0m
+[31m [0m apply_dynamic_background                                                             [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 79 [0m[2m│   [0m[94mif[0m [95mnot[0m is_logged_in:                                                       [31m [0m
+[31m [0m   [2m 80 [0m[2m│   │   [0mbg_path = Path([33m"[0m[33mfrontend/assets/img/background-altheia.jpg[0m[33m"[0m)           [31m [0m
+[31m [0m   [2m 81 [0m[2m│   │   [0m[2m# Convertir imagen a base64[0m                                            [31m [0m
+[31m [0m [31m❱ [0m 82 [2m│   │   [0mimage_base64 = base64.b64encode(bg_path.read_bytes()).decode()         [31m [0m
+[31m [0m   [2m 83 [0m[2m│   │   [0mcss_insert = [33mf[0m[33m"""[0m[33mbackground-image: url([0m[33m"[0m[33mdata:image/png;base64,[0m[33m{[0mimage_b [31m [0m
+[31m [0m   [2m 84 [0m[2m│   [0m[94melse[0m:                                                                      [31m [0m
+[31m [0m   [2m 85 [0m[2m│   │   [0mcss_insert = [33m'[0m[33mbackground-color: inherit;[0m[33m'[0m                              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/opt/python-3.10/lib/python3.10/[0m[1mpathlib.py[0m:1126 in read_bytes                        [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m1123 [0m[2;90m│   │   [0m[33m"""[0m                                                                   [31m [0m
+[31m [0m   [2m1124 [0m[2;33m│   │   [0m[33mOpen the file in bytes mode, read it, and close the file.[0m             [31m [0m
+[31m [0m   [2m1125 [0m[2;33m│   │   [0m[33m"""[0m                                                                   [31m [0m
+[31m [0m [31m❱ [0m1126 [2m│   │   [0m[94mwith[0m [96mself[0m.open(mode=[33m'[0m[33mrb[0m[33m'[0m) [94mas[0m f:                                       [31m [0m
+[31m [0m   [2m1127 [0m[2m│   │   │   [0m[94mreturn[0m f.read()                                                   [31m [0m
+[31m [0m   [2m1128 [0m[2m│   [0m                                                                          [31m [0m
+[31m [0m   [2m1129 [0m[2m│   [0m[94mdef[0m[90m [0m[92mread_text[0m([96mself[0m, encoding=[94mNone[0m, errors=[94mNone[0m):                          [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/opt/python-3.10/lib/python3.10/[0m[1mpathlib.py[0m:1119 in open                              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m1116 [0m[2;33m│   │   [0m[33m"""[0m                                                                   [31m [0m
+[31m [0m   [2m1117 [0m[2m│   │   [0m[94mif[0m [33m"[0m[33mb[0m[33m"[0m [95mnot[0m [95min[0m mode:                                                   [31m [0m
+[31m [0m   [2m1118 [0m[2m│   │   │   [0mencoding = io.text_encoding(encoding)                             [31m [0m
+[31m [0m [31m❱ [0m1119 [2m│   │   [0m[94mreturn[0m [96mself[0m._accessor.open([96mself[0m, mode, buffering, encoding, errors,   [31m [0m
+[31m [0m   [2m1120 [0m[2m│   │   │   │   │   │   │   │      [0mnewline)                                   [31m [0m
+[31m [0m   [2m1121 [0m[2m│   [0m                                                                          [31m [0m
+[31m [0m   [2m1122 [0m[2m│   [0m[94mdef[0m[90m [0m[92mread_bytes[0m([96mself[0m):                                                     [31m [0m
+[31m────────────────────────────────────────────────────────────────────────────────────────[0m
+[1;91mFileNotFoundError: [0m[1m[[0mErrno [1;36m2[0m[1m][0m No such file or directory: 
+[32m'frontend/assets/img/background-altheia.jpg'[0m
+[31m──[0m[31m────────────────────────[0m[31m [0m[1;31mTraceback [0m[1;2;31m(most recent call last)[0m[31m [0m[31m─────────────────────────[0m[31m──[0m
+[31m [0m [2m/home/drodriguez/ia-bot/venv310/lib/python3.10/site-packages/streamlit/runtime/scrip[0m [31m [0m
+[31m [0m [2mtrunner/[0m[1mexec_code.py[0m:121 in exec_func_with_error_handling                            [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/drodriguez/ia-bot/venv310/lib/python3.10/site-packages/streamlit/runtime/scrip[0m [31m [0m
+[31m [0m [2mtrunner/[0m[1mscript_runner.py[0m:645 in code_to_exec                                         [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/drodriguez/ia-bot/altheia_chat/frontend/[0m[1mapp.py[0m:29 in <module>                  [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 26 [0m                                                                               [31m [0m
+[31m [0m   [2m 27 [0m[2m# Cargar estilos institucionales[0m                                               [31m [0m
+[31m [0m   [2m 28 [0mutils.load_css([33m"[0m[33mfrontend/assets/styles.css[0m[33m"[0m)                                   [31m [0m
+[31m [0m [31m❱ [0m 29 utils.apply_dynamic_background([96mbool[0m(st.session_state.user_id))                 [31m [0m
+[31m [0m   [2m 30 [0m                                                                               [31m [0m
+[31m [0m   [2m 31 [0m[2m# --- Sidebar login/logout ---[0m                                                 [31m [0m
+[31m [0m   [2m 32 [0m[94mwith[0m st.sidebar:                                                               [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/home/drodriguez/ia-bot/altheia_chat/frontend/shared/[0m[1mutils.py[0m:82 in                  [31m [0m
+[31m [0m apply_dynamic_background                                                             [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m 79 [0m[2m│   [0m[94mif[0m [95mnot[0m is_logged_in:                                                       [31m [0m
+[31m [0m   [2m 80 [0m[2m│   │   [0mbg_path = Path([33m"[0m[33mfrontend/assets/img/background-altheia.jpg[0m[33m"[0m)           [31m [0m
+[31m [0m   [2m 81 [0m[2m│   │   [0m[2m# Convertir imagen a base64[0m                                            [31m [0m
+[31m [0m [31m❱ [0m 82 [2m│   │   [0mimage_base64 = base64.b64encode(bg_path.read_bytes()).decode()         [31m [0m
+[31m [0m   [2m 83 [0m[2m│   │   [0mcss_insert = [33mf[0m[33m"""[0m[33mbackground-image: url([0m[33m"[0m[33mdata:image/png;base64,[0m[33m{[0mimage_b [31m [0m
+[31m [0m   [2m 84 [0m[2m│   [0m[94melse[0m:                                                                      [31m [0m
+[31m [0m   [2m 85 [0m[2m│   │   [0mcss_insert = [33m'[0m[33mbackground-color: inherit;[0m[33m'[0m                              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/opt/python-3.10/lib/python3.10/[0m[1mpathlib.py[0m:1126 in read_bytes                        [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m1123 [0m[2;90m│   │   [0m[33m"""[0m                                                                   [31m [0m
+[31m [0m   [2m1124 [0m[2;33m│   │   [0m[33mOpen the file in bytes mode, read it, and close the file.[0m             [31m [0m
+[31m [0m   [2m1125 [0m[2;33m│   │   [0m[33m"""[0m                                                                   [31m [0m
+[31m [0m [31m❱ [0m1126 [2m│   │   [0m[94mwith[0m [96mself[0m.open(mode=[33m'[0m[33mrb[0m[33m'[0m) [94mas[0m f:                                       [31m [0m
+[31m [0m   [2m1127 [0m[2m│   │   │   [0m[94mreturn[0m f.read()                                                   [31m [0m
+[31m [0m   [2m1128 [0m[2m│   [0m                                                                          [31m [0m
+[31m [0m   [2m1129 [0m[2m│   [0m[94mdef[0m[90m [0m[92mread_text[0m([96mself[0m, encoding=[94mNone[0m, errors=[94mNone[0m):                          [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m [2m/opt/python-3.10/lib/python3.10/[0m[1mpathlib.py[0m:1119 in open                              [31m [0m
+[31m [0m                                                                                      [31m [0m
+[31m [0m   [2m1116 [0m[2;33m│   │   [0m[33m"""[0m                                                                   [31m [0m
+[31m [0m   [2m1117 [0m[2m│   │   [0m[94mif[0m [33m"[0m[33mb[0m[33m"[0m [95mnot[0m [95min[0m mode:                                                   [31m [0m
+[31m [0m   [2m1118 [0m[2m│   │   │   [0mencoding = io.text_encoding(encoding)                             [31m [0m
+[31m [0m [31m❱ [0m1119 [2m│   │   [0m[94mreturn[0m [96mself[0m._accessor.open([96mself[0m, mode, buffering, encoding, errors,   [31m [0m
+[31m [0m   [2m1120 [0m[2m│   │   │   │   │   │   │   │      [0mnewline)                                   [31m [0m
+[31m [0m   [2m1121 [0m[2m│   [0m                                                                          [31m [0m
+[31m [0m   [2m1122 [0m[2m│   [0m[94mdef[0m[90m [0m[92mread_bytes[0m([96mself[0m):                                                     [31m [0m
+[31m────────────────────────────────────────────────────────────────────────────────────────[0m
+[1;91mFileNotFoundError: [0m[1m[[0mErrno [1;36m2[0m[1m][0m No such file or directory: 
+[32m'frontend/assets/img/background-altheia.jpg'[0m
+  Stopping...

@@ -58,7 +58,7 @@ async def store_message(db: AsyncSession, chat_id: str, user_id: str, role: str,
     await db.commit()
 
     # Memoria corta: Redis
-    # await save_message(chat_id, role, content)
+    await save_message(chat_id, role, content)
 
     log.info(f"💾 Mensaje guardado: chat={chat_id} role={role}")
     return message

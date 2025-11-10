@@ -5,7 +5,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends, UploadFile, File, HTTPException
 from fastapi.responses import StreamingResponse
 from models.schemas import ChatRequest, ChatResponse, FileIngestResponse, RephraseRequest, RephraseResponse
-from core.graph import run_rag_chat, run_rag_chat_stream, run_rephrase
+# from core.graph import run_rag_chat, run_rag_chat_stream, run_rephrase
+from core.agentic_graph import run_agent_chat, run_agent_chat_stream
 from services.auth_jwt import get_current_user
 from core.utils import read_chunk_file
 from services.indexing import upsert_chunks
@@ -35,7 +36,7 @@ async def chat(
 
     try:
         # 1️⃣ Ejecutar el pipeline híbrido con memoria y RAG
-        result = await run_rag_chat(
+        result = await run_agent_chat(
             question=req.question,
             user_id=user["user"],
             db=db,
@@ -66,7 +67,7 @@ async def chat_stream(
     """
     try:
         async def generate():
-            async for chunk in run_rag_chat_stream(
+            async for chunk in run_agent_chat_stream(
                 question=req.question,
                 user_id=user["user"],
                 db=db,
@@ -160,6 +161,7 @@ async def rephrase(req: RephraseRequest):
 # ==============================================================
 @router.post("/ingest-file", response_model=FileIngestResponse)
 async def user_ingest_file(
+    chat_id: str = None,
     file: UploadFile = File(...), 
     user: str = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
@@ -178,6 +180,7 @@ async def user_ingest_file(
         # 3. COMMIT FASE 2: Registrar en PostgreSQL
         document_data = {
             "id": result["doc_id"],
+            "chat_id": chat_id,
             "user_id": user_id,
             "original_filename": file.filename,
             "file_hash": result["file_hash"],
@@ -208,4 +211,5 @@ async def user_ingest_file(
             "doc_id": "", 
             "chunks": 0, 
             "message": f"Error processing file: {str(e)}"
+
         }

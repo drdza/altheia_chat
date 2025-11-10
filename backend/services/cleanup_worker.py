@@ -2,7 +2,7 @@
 
 import logging
 import asyncio
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy import and_
@@ -20,7 +20,7 @@ async def cleanup_orphaned_chunks():
     async for db in get_db():
         try:
             # Encontrar transacciones pendientes con más de 1 hora
-            cutoff_time = datetime.utcnow() - timedelta(hours=1)
+            cutoff_time = datetime.now(timezone.utc) - timedelta(hours=1)
             
             result = await db.execute(
                 select(UploadTransaction)
@@ -43,7 +43,7 @@ async def cleanup_orphaned_chunks():
                 
                 # Marcar transacción como limpiada
                 tx.status = 'cleaned'
-                tx.updated_at = datetime.utcnow()
+                tx.updated_at = datetime.now(timezone.utc)
             
             await db.commit()
             

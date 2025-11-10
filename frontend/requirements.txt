@@ -13,3 +13,7 @@ python-dotenv==1.1.1
 pydantic==2.9.2
 pydantic-settings==2.11.0
 fastapi==0.115.0
+<<<<<<< HEAD
+=======
+sympy
+>>>>>>> 5a6ab804e497ae792782783eba95ec09d440b13c

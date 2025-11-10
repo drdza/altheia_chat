@@ -10,6 +10,7 @@ class Settings(BaseModel):
     # Seguridad
     API_KEY: str = Field(default=os.getenv("API_KEY", "dev-user-key"))
     API_ADMIN_KEY: str = Field(default=os.getenv("API_ADMIN_KEY", "dev-admin-key"))
+    ALTHEIA_SQL: str = Field(default=os.getenv("ALTHEIA_SQL", ))
 
     # LLM Inference (agnóstico por API)
     LLM_API_URL: AnyHttpUrl | str = os.getenv("LLM_API_URL", "http://localhost:8001/chat")

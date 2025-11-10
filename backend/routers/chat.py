@@ -36,7 +36,7 @@ async def chat(
 
     try:
         # 1️⃣ Ejecutar el pipeline híbrido con memoria y RAG
-        result = await run_rag_chat(
+        result = await run_agent_chat(
             question=req.question,
             user_id=user["user"],
             db=db,
@@ -67,7 +67,7 @@ async def chat_stream(
     """
     try:
         async def generate():
-            async for chunk in run_rag_chat_stream(
+            async for chunk in run_agent_chat_stream(
                 question=req.question,
                 user_id=user["user"],
                 db=db,

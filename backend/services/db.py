@@ -19,8 +19,8 @@ class ChatSession(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
     user_id = Column(String, index=True)
     title = Column(String, default=f"Chat {datetime.now(timezone.utc)}")
-    created_at = Column(DateTime, default=datetime.now(timezone.utc))
-    updated_at = Column(DateTime, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))  # <- Cambiado
+    updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
 class ChatMessage(Base):
     __tablename__ = "chat_messages"
@@ -28,7 +28,7 @@ class ChatMessage(Base):
     chat_id = Column(UUID(as_uuid=True), ForeignKey("chat_sessions.id"))
     role = Column(String)
     content = Column(Text)
-    timestamp = Column(DateTime, default=datetime.now(timezone.utc))
+    timestamp = Column(DateTime, default=lambda: datetime.now(timezone.utc)) 
 
 # 🆕 NUEVAS TABLAS para gestión documental
 class Document(Base):
@@ -39,11 +39,11 @@ class Document(Base):
     original_filename = Column(String)
     file_hash = Column(String(64))
     current_version = Column(Integer, default=1)
-    document_type = Column(String(20), default='user_private')  # 'user_private', 'public_base'
+    document_type = Column(String(20), default='user_private')
     status = Column(String(20), default='active')
     chunks_count = Column(Integer, default=0)  
-    created_at = Column(DateTime, default=datetime.now(timezone.utc))
-    last_updated = Column(DateTime, default=datetime.now(timezone.utc))
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))  # <- Cambiado
+    last_updated = Column(DateTime, default=lambda: datetime.now(timezone.utc))  # <- Cambiado
     doc_metadata = Column(JSON)
 
 class DocumentVersion(Base):
@@ -52,18 +52,18 @@ class DocumentVersion(Base):
     document_id = Column(UUID(as_uuid=True), ForeignKey("documents.id"))
     version = Column(Integer)
     file_hash = Column(String(64))
-    doc_id = Column(String)  # ID único en Milvus para esta versión
-    created_at = Column(DateTime, default=datetime.now(timezone.utc))
+    doc_id = Column(String)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))  # <- Cambiado
     chunks_count = Column(Integer)
 
 class UploadTransaction(Base):
     __tablename__ = "upload_transactions"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    doc_id = Column(String, index=True)  # ID del documento en Milvus
+    doc_id = Column(String, index=True)
     user_id = Column(String)
-    status = Column(String(20), default='pending')  # 'pending', 'completed', 'failed'
-    created_at = Column(DateTime, default=datetime.now(timezone.utc))
-    updated_at = Column(DateTime, default=datetime.now(timezone.utc))
+    status = Column(String(20), default='pending')
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))  # <- Cambiado
+    updated_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))  # <- Cambiado
 
 # 🧠 Conexión
 engine = create_async_engine(DATABASE_URL, echo=False, future=True)

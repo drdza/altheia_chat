@@ -22,19 +22,16 @@ template_dir = os.path.join(os.path.dirname(__file__), "../prompts")
 env = Environment(loader=FileSystemLoader(template_dir))
 
 async def detect_intention(question: str) -> str:
-    """
-    Clasifica la intención del usuario con reglas simples.
-    Retorna: 'rephrase', 'analyze_user_doc', 'rag_chat', 'small_talk'
-    """
-    q = question.lower().strip()
+    """Detección inteligente de intenciones usando el LLM"""
 
-    if any(w in q for w in ["reformula", "reescribe", "mejorar redacción", "rephrase"]):
-        return "rephrase"
-    if any(w in q for w in ["analiza", "documento", "archivo", "pdf", "word", "excel"]):
-        return "analyze_user_doc"
-    if len(q.split()) < 4:
-        return "small_talk"
-    return "rag_chat"
+    prompt = render_prompt(
+        "detec_intention.j2",
+        question=question,
+    )
+    intention = await call_llm(prompt)
+    log.info(f"🧭 Intención detectada: {intention}")
+    return intention
+
 
 def render_prompt(template_name: str, **kwargs) -> str:
     template = env.get_template(template_name)

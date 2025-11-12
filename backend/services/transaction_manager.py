@@ -2,7 +2,7 @@
 
 import uuid
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
@@ -11,6 +11,9 @@ from services.db import UploadTransaction, Document, DocumentVersion
 from services.indexing import delete_docs
 
 log = logging.getLogger(__name__)
+
+def utc_naive_now():
+    return datetime.now(timezone.utc).replace(tzinfo=None)
 
 class TransactionManager:
     
@@ -24,8 +27,8 @@ class TransactionManager:
             doc_id=doc_id,
             user_id=user_id,
             status='pending',
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow()
+            created_at=utc_naive_now(),
+            updated_at=utc_naive_now()
         )
         db.add(transaction_record)
         await db.commit()
@@ -58,7 +61,7 @@ class TransactionManager:
                 file_hash=document_data["file_hash"],
                 doc_id=document_data["id"],
                 chunks_count=document_data["chunks_count"],
-                created_at=datetime.utcnow()
+                created_at=utc_naive_now()
             )
             db.add(version)
             
@@ -66,7 +69,7 @@ class TransactionManager:
             await db.execute(
                 update(UploadTransaction)
                 .where(UploadTransaction.id == transaction_id)
-                .values(status='completed', updated_at=datetime.utcnow())
+                .values(status='completed', updated_at=utc_naive_now())
             )
             
             await db.commit()
@@ -92,7 +95,7 @@ class TransactionManager:
             await db.execute(
                 update(UploadTransaction)
                 .where(UploadTransaction.id == transaction_id)
-                .values(status='failed', updated_at=datetime.utcnow())
+                .values(status='failed', updated_at=utc_naive_now())
             )
             await db.commit()
             log.info(f"🗑️  Transacción marcada como fallida: {transaction_id}")

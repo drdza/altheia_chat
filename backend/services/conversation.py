@@ -7,7 +7,7 @@ from typing import List, Dict, Optional
 from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from services.db import ChatSession, ChatMessage
-from services.memory import redis_client, save_message, get_history
+from services.memory import redis_client, save_message, get_all_history, get_optimized_history
 import logging
 
 log = logging.getLogger("services.conversation")
@@ -117,7 +117,14 @@ async def get_recent_history(chat_id: str) -> List[Dict]:
     Recupera los últimos mensajes recientes desde Redis.
     """
     try:
-        return await get_history(chat_id)
+        # history_messages = await get_optimized_history(
+        #     chat_id,
+        #     max_messages=6, 
+        #     max_tokens=1000
+        # )
+        history_messages = await get_all_history(chat_id)
+        return history_messages
+
     except Exception as e:
         log.error(f"❌ Error recuperando historial Redis: {e}")
         return []

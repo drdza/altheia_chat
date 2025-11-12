@@ -1,26 +1,29 @@
 # backend/services/db.py
-
 import os
 import uuid
 from datetime import datetime, timezone
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy import Column, String, DateTime, Text, ForeignKey, Integer, JSON
+from sqlalchemy.sql import func
 from sqlalchemy.dialects.postgresql import UUID
 from core.config import settings
 
 DATABASE_URL = settings.DATABASE_ADMIN_URL
-
 Base = declarative_base()
 
-# 🧩 Tablas existentes
+def _default_chat_title():
+    # se calcula al insertar, no al importar el módulo
+    # si prefieres puro server-side, quita el default y genera el título en app code
+    return f"Chat {datetime.now(timezone.utc).isoformat().replace('+00:00','Z')}"
+
 class ChatSession(Base):
     __tablename__ = "chat_sessions"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, index=True)
     user_id = Column(String, index=True)
-    title = Column(String, default=f"Chat {datetime.now(timezone.utc)}")
-    created_at = Column(DateTime, default=datetime.now(timezone.utc))
-    updated_at = Column(DateTime, default=datetime.now(timezone.utc), onupdate=datetime.now(timezone.utc))
+    title = Column(String, default=_default_chat_title)  # 👈 default callable, no f-string
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)  # 👈
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
 
 class ChatMessage(Base):
     __tablename__ = "chat_messages"
@@ -28,9 +31,8 @@ class ChatMessage(Base):
     chat_id = Column(UUID(as_uuid=True), ForeignKey("chat_sessions.id"))
     role = Column(String)
     content = Column(Text)
-    timestamp = Column(DateTime, default=datetime.now(timezone.utc))
+    timestamp = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
-# 🆕 NUEVAS TABLAS para gestión documental
 class Document(Base):
     __tablename__ = "documents"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
@@ -39,11 +41,12 @@ class Document(Base):
     original_filename = Column(String)
     file_hash = Column(String(64))
     current_version = Column(Integer, default=1)
-    document_type = Column(String(20), default='user_private')  # 'user_private', 'public_base'
+    document_type = Column(String(20), default='user_private')
     status = Column(String(20), default='active')
-    created_at = Column(DateTime, default=datetime.now(timezone.utc))
-    last_updated = Column(DateTime, default=datetime.now(timezone.utc))
-    doc_metadata = Column(JSON)  # Para tags, descripción, etc.
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    last_updated = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
+    chunks_count = Column(Integer, default=0)
+    doc_metadata = Column(JSON)
 
 class DocumentVersion(Base):
     __tablename__ = "document_versions"
@@ -51,20 +54,19 @@ class DocumentVersion(Base):
     document_id = Column(UUID(as_uuid=True), ForeignKey("documents.id"))
     version = Column(Integer)
     file_hash = Column(String(64))
-    doc_id = Column(String)  # ID único en Milvus para esta versión
-    created_at = Column(DateTime, default=datetime.now(timezone.utc))
+    doc_id = Column(String)  # id en Milvus
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     chunks_count = Column(Integer)
 
 class UploadTransaction(Base):
     __tablename__ = "upload_transactions"
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    doc_id = Column(String, index=True)  # ID del documento en Milvus
+    doc_id = Column(String, index=True)
     user_id = Column(String)
-    status = Column(String(20), default='pending')  # 'pending', 'completed', 'failed'
-    created_at = Column(DateTime, default=datetime.now(timezone.utc))
-    updated_at = Column(DateTime, default=datetime.now(timezone.utc))
+    status = Column(String(20), default='pending')
+    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
 
-# 🧠 Conexión
 engine = create_async_engine(DATABASE_URL, echo=False, future=True)
 AsyncSessionLocal = sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)
 
@@ -72,7 +74,6 @@ async def get_db():
     async with AsyncSessionLocal() as session:
         yield session
 
-# 🛠️ Inicialización automática
 async def init_db():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)

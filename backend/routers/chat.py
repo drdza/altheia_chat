@@ -64,6 +64,8 @@ async def chat_stream(
     """
     Endpoint de chat con respuesta en streaming
     """
+    log.info(f"Chat User: {user}")
+
     try:
         async def generate():
             async for chunk in run_rag_chat_stream(

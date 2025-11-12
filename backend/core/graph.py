@@ -143,9 +143,9 @@ def format_sql_response_complete(question: str, sql_result: Dict) -> str:
     """Formatea respuesta usando TODA la información del Agente SQL"""
     
     # Extraer componentes de la respuesta
-    sql_query = sql_result.get("sql", "")
-    flow = sql_result.get("flow", "")
-    reformulation = sql_result.get("reformulation", "")
+    # sql_query = sql_result.get("sql", "")
+    # flow = sql_result.get("flow", "")
+    # reformulation = sql_result.get("reformulation", "")
     narrative = sql_result.get("narrative", "")
     result_data = sql_result.get("result", {})
     rows = result_data.get("rows", [])
@@ -154,11 +154,11 @@ def format_sql_response_complete(question: str, sql_result: Dict) -> str:
     # Construir respuesta estructurada
     response_parts = []
     
-    # 1. Confirmación de la consulta
-    if reformulation:
-        response_parts.append(f"🔍 **Consulta:** {reformulation}")
-    else:
-        response_parts.append(f"🔍 **Consulta:** {question}")
+    # # 1. Confirmación de la consulta
+    # if reformulation:
+    #     response_parts.append(f"🔍 **Consulta:** {reformulation}")
+    # else:
+    #     response_parts.append(f"🔍 **Consulta:** {question}")
     
     # 2. Resultados de datos
     if not rows:
@@ -187,12 +187,12 @@ def format_sql_response_complete(question: str, sql_result: Dict) -> str:
                 response_parts.append(f"  ... y {len(rows) - 3} registros más")
     
     # 3. Explicación del proceso (si está disponible)
-    if flow and "Flujo Técnico" in flow:
-        # Extraer solo la parte explicativa sin el markdown
-        flow_clean = flow.replace("##### 🔀 Flujo Técnico:\n", "").strip()
-        if flow_clean:
-            response_parts.append("\n⚙️ **Proceso:**")
-            response_parts.append(flow_clean)
+    # if flow and "Flujo Técnico" in flow:
+    #     # Extraer solo la parte explicativa sin el markdown
+    #     flow_clean = flow.replace("##### 🔀 Flujo Técnico:\n", "").strip()
+    #     if flow_clean:
+    #         response_parts.append("\n⚙️ **Proceso:**")
+    #         response_parts.append(flow_clean)
     
     # 4. Narrative adicional (si está disponible)
     if narrative:
@@ -223,12 +223,10 @@ async def route_based_on_intention(intention_data: dict, question: str, user_id:
         return "content_creation.j2", []
     
     elif category == "document_analysis":
-        # Solo buscar contexto si la pregunta menciona documentos específicos
         context_chunks = await retrieve_context(question, user_id=user_id)
         return "rag_chat.j2", context_chunks
     
-    else:  # information_retrieval, data_query, technical_support
-        # Buscar en base de conocimiento
+    else:
         context_chunks = await retrieve_context(question, user_id=user_id)
         return "rag_chat.j2", context_chunks
 
@@ -263,17 +261,20 @@ async def build_chat_pipeline(question: str, user_id: str, username: str = None,
     # 6️⃣ Construir prompt final (inyectando sql_response si existe)
     memory_context = await get_recent_history(session.id)
     
-    log.info(f"Memory Context: {memory_context}")
+    log.info(f"🧩 Memory Context Len: {len(memory_context)}")
+    
     prompt = render_prompt(
         template,
         question=question,
         context=context_chunks,
         memory=memory_context,
-        user_name=username,
+        username=username,
         intention=intention_data["category"],
         subcategory=intention_data["subcategory"],
         sql_response=sql_response
     )
+
+    log.info(f"📝 Prompt: {prompt}")
     
     return {
         "prompt": prompt,
@@ -282,7 +283,7 @@ async def build_chat_pipeline(question: str, user_id: str, username: str = None,
         "context_chunks": context_chunks,
         "memory_context": memory_context,
         "title_chat": title_chat,
-        "sql_response": sql_response  # 🚨 Para referencia
+        "sql_response": sql_response
     }
 
 async def run_rag_chat(question: str, user_id: str, db, chat_id: str = None, username: str = None):
